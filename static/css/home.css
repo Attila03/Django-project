@@ -1,0 +1,21 @@
+
+body {
+       background: linear-gradient(to right, #a1d3b0, #f6f1d3);
+}
+
+h1 {
+    margin:0 32% 6% 32%;
+}
+
+.btn {
+    margin: 3% 39%;
+    width: 20%;
+    display: block;
+    border-radius: 5px;
+    border-color: #000;
+    font-size: larger;
+}
+
+.navbar {
+    border-radius: 0;
+}

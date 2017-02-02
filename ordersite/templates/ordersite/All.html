@@ -1,0 +1,30 @@
+{% extends 'ordersite/base.html' %}
+
+<!--{% load static %}-->
+
+{% block title %} | Menu {% endblock title %}
+
+{% block customcss %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/basic.css' %}"/>
+{% endblock customcss %}
+
+{% block con %}
+    <!--<h1>Welcome to The Pizza Place</h1>-->
+    <div class="content">
+        <h2>MENU</h2>
+        {% for pizza in P %}
+        <a href="{% url 'Pizzaorder' pizza.name %}">
+        <div class="pizza">
+            <img src = "{% static pizza.getimageurl %}"/>
+            <p> {{pizza.name}} </p>
+            {% for topping in pizza.toppings.all %}
+            <p>{{ topping.name }}</p>
+            {% endfor %}
+            <p>Price: Rs.{{ pizza.cost }}</p>
+            <!--<br>-->
+        </div>
+        </a>
+        {% endfor %}
+    </div>
+{% endblock con %}
+

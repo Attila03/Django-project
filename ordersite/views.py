@@ -40,7 +40,7 @@ class Nonvegview(View):
             'T': T,
         }
 
-        return render(request, 'ordersite/NonVeg.html', context=context)
+        return render(request, 'ordersite/Nonveg.html', context=context)
 
 class Homeview(View):
 

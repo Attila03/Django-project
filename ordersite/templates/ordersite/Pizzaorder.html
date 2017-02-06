@@ -16,7 +16,9 @@
     Your order has been successfully placed.
 </div>
 <div class="pizza" style="display: block;margin:2% auto; ">
-    <img src="{% static pizza.getimageurl %}"/>
+    {% if not pizza.custom %}
+        <img src="{% static pizza.getimageurl %}"/>
+    {% endif %}
     <p>{{ pizza.name }}</p>
     {% for topping in pizza.toppings.all %}
     <p>{{ topping.name }}</p>

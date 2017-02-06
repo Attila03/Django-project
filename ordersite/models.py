@@ -36,16 +36,17 @@ class Topping(models.Model):
         return "{}  -  {}".format(self.name, self.cost)
 
 class Pizza(models.Model):
-    name = models.CharField(max_length=50,blank=False, unique=True )
+    name = models.CharField(max_length=50,blank=False, unique=True)
     cost = models.IntegerField(blank=True, default=0)
     toppings = models.ManyToManyField(Topping, blank=True)
     vegetarian = models.BooleanField(blank=True, default=True)
+    custom = models.BooleanField(default=True)
 
     def total_cost(self):
         return sum(topping.cost for topping in self.toppings.all())
 
     def __str__(self):
-        return "{}\t{}\n{}".format(self.name, self.cost,  [t.name for t in self.toppings.all()])
+        return "{} {} {}".format(self.name, self.cost,  [t.name for t in self.toppings.all()])
 
     @property
     def getimageurl(self):

@@ -1,14 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.views import View
-
+from .forms import PizzaForm
+from .models import Pizza, Topping
 # Create your views here.
 
-from .models import Pizza, Topping
 
 class Allview(View):
 
     def get(self, request, *args, **kwargs):
-        P = Pizza.objects.all()
+        P = Pizza.objects.filter(custom=False)
         T = Topping.objects.all()
 
         context ={
@@ -17,10 +17,11 @@ class Allview(View):
         }
         return render(request, 'ordersite/All.html', context=context)
 
+
 class Vegview(View):
 
     def get(self, request, *args, **kwargs):
-        P = Pizza.objects.all().filter(vegetarian=True)
+        P = Pizza.objects.all().filter(vegetarian=True,custom=False)
         T = Topping.objects.all()
 
         context = {
@@ -30,9 +31,10 @@ class Vegview(View):
 
         return render(request, 'ordersite/Veg.html', context = context)
 
+
 class Nonvegview(View):
     def get(self, request, *args, **kwargs):
-        P = Pizza.objects.all().filter(vegetarian=False)
+        P = Pizza.objects.all().filter(vegetarian=False, custom=False)
         T = Topping.objects.all()
 
         context = {
@@ -42,10 +44,12 @@ class Nonvegview(View):
 
         return render(request, 'ordersite/Nonveg.html', context=context)
 
+
 class Homeview(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'ordersite/Home.html')
+
 
 class Pizzaorderview(View):
 
@@ -55,8 +59,29 @@ class Pizzaorderview(View):
         }
         return render(request, 'ordersite/Pizzaorder.html', context=context)
 
+
 class Helpview(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'ordersite/Help.html')
+
+class Customview(View):
+
+
+    def get(self, request, *args, **kwargs):
+        context ={
+            'PF' : PizzaForm(),
+        }
+        return render(request, 'ordersite/Custom.html', context=context)
+
+    def post(self, request):
+        form = PizzaForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            P = Pizza(name=cd['name'])
+            P.save()
+            for topping in cd['toppings']:
+                P.toppings.add(topping)
+        return render(request, 'ordersite/Pizzaorder.html', context={'pizza':P})
+
 

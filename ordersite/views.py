@@ -8,6 +8,7 @@ from .models import Pizza, Topping
 class Allview(View):
 
     def get(self, request, *args, **kwargs):
+        #print(request)
         P = Pizza.objects.filter(custom=False)
         T = Topping.objects.all()
 
@@ -65,23 +66,27 @@ class Helpview(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'ordersite/Help.html')
 
+
 class Customview(View):
 
-
     def get(self, request, *args, **kwargs):
+        #print(request)
         context ={
             'PF' : PizzaForm(),
         }
         return render(request, 'ordersite/Custom.html', context=context)
 
     def post(self, request):
+        #print(request)
+        #print(type(request))
         form = PizzaForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             P = Pizza(name=cd['name'])
             P.save()
-            for topping in cd['toppings']:
-                P.toppings.add(topping)
+            P.toppings.add(*cd['toppings'])
+            # for topping in cd['toppings']:
+            #     P.toppings.add(topping)
         return render(request, 'ordersite/Pizzaorder.html', context={'pizza':P})
 
 

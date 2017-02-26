@@ -1,49 +1,10 @@
-from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
 from django.views import View
-from .forms import PizzaForm
-from .models import Pizza, Topping
+from .forms import PizzaForm, RegistrationForm, UserLoginForm
+from .models import Pizza
 # Create your views here.
-
-
-class Allview(View):
-
-    def get(self, request, *args, **kwargs):
-        #print(request)
-        P = Pizza.objects.filter(custom=False)
-        T = Topping.objects.all()
-
-        context ={
-            'P': P,
-            'T': T,
-        }
-        return render(request, 'ordersite/All.html', context=context)
-
-
-class Vegview(View):
-
-    def get(self, request, *args, **kwargs):
-        P = Pizza.objects.all().filter(vegetarian=True,custom=False)
-        T = Topping.objects.all()
-
-        context = {
-            'P': P,
-            'T': T,
-        }
-
-        return render(request, 'ordersite/Veg.html', context = context)
-
-
-class Nonvegview(View):
-    def get(self, request, *args, **kwargs):
-        P = Pizza.objects.all().filter(vegetarian=False, custom=False)
-        T = Topping.objects.all()
-
-        context = {
-            'P': P,
-            'T': T,
-        }
-
-        return render(request, 'ordersite/Nonveg.html', context=context)
 
 
 class Homeview(View):
@@ -52,9 +13,23 @@ class Homeview(View):
         return render(request, 'ordersite/Home.html')
 
 
+class Menuview(View):
+
+    def get(self, request, menu_type=None):
+        P = Pizza.objects.filter(custom=False)
+        if menu_type == 'Veg':
+            P = P.filter(vegetarian=True, custom=False)
+        elif menu_type == 'Nonveg':
+            P = P.filter(vegetarian=False, custom=False)
+        context = { 'P': P, }
+
+        return render(request, 'ordersite/Menu.html', context=context)
+
+
 class Pizzaorderview(View):
 
-    def get(self, request, pizza_name=None, *args, **kwargs ):
+    def get(self, request, pizza_name=None,menu_type=None, *args, **kwargs ):
+        print(menu_type)
         context ={
             'pizza' : get_object_or_404(Pizza, name=pizza_name),
         }
@@ -70,23 +45,65 @@ class Helpview(View):
 class Customview(View):
 
     def get(self, request, *args, **kwargs):
-        #print(request)
         context ={
             'PF' : PizzaForm(),
         }
         return render(request, 'ordersite/Custom.html', context=context)
 
     def post(self, request):
-        #print(request)
-        #print(type(request))
         form = PizzaForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             P = Pizza(name=cd['name'])
             P.save()
             P.toppings.add(*cd['toppings'])
-            # for topping in cd['toppings']:
-            #     P.toppings.add(topping)
         return render(request, 'ordersite/Pizzaorder.html', context={'pizza':P})
 
+
+class Registerview(View):
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'form' : RegistrationForm(),
+        }
+
+        return render(request, 'ordersite/Register.html', context=context)
+
+    def post(self, request, *args, **kwargs):
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            password = form.cleaned_data['password']
+            new_user.set_password(password)
+            new_user.save()
+        context = {
+            'form' : form,
+        }
+
+        return render(request, 'ordersite/Register.html',context=context)
+
+class Loginview(View):
+
+    def get(self, request, *args, **kwargs):
+        form = UserLoginForm()
+        context = {'form':form}
+        return render(request, 'ordersite/Login.html',context=context)
+
+    def post(self,request,*args,**kwargs):
+        form = UserLoginForm(request.POST)
+        context = {'form':form}
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username,password=password)
+            login(request, user=user)
+            return redirect('/')
+        return render(request, 'ordersite/Login.html', context=context)
+
+class Logoutview(View):
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        print(request.user)
+        return redirect('/')
 

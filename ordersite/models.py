@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, User
 
 from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed
@@ -61,7 +62,6 @@ def update_pizza(sender, **kwargs):
     current.vegetarian = all(topping.vegetarian for topping in current.toppings.all())
     current.save()
 
-
 # Cannot use Manager 'objects' on instances of Model, can only be used on the Model class itself.
 
     # def save(self, *args, **kwargs):
@@ -80,6 +80,20 @@ def update_pizza(sender, **kwargs):
 #     for t in current.toppings.all():
 #         current.cost += t.cost
 #     current.vegetarian = all(t.vegetarian for t in current.toppings.all())
+
+
+class Customer(User):
+
+    class Meta:
+        proxy=True
+
+    def get_carts(self):
+        return self.cart_set.all()
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer)
+    pizzas = models.ManyToManyField(Pizza, blank=True)
+
 
 
 

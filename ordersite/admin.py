@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Topping, Pizza
+from .models import Topping, Pizza, Customer, Cart
 
 # Register your models here.
 
@@ -19,3 +19,5 @@ admin.site.register(Topping)
 #         form.instance.save(update_fields=['cost', 'vegeterian'])
 
 admin.site.register(Pizza)
+admin.site.register(Customer)
+admin.site.register(Cart)

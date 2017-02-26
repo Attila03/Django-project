@@ -8,7 +8,7 @@
 
 {% block con %}
     <h1> Welcome To The Pizza Place </h1>
-    <a class="btn" id="Login" href="#">Login</a>
-    <a class="btn" href="{% url 'All' %}">Continue As a Guest</a>
-    <a class="btn" href="#">Signup</a>
+    <a class="btn" id="Login" href="{% url 'Login' %}">Login</a>
+    <a class="btn" href="{% url 'Menu' 'All' %}">Continue As a Guest</a>
+    <a class="btn" href="{% url 'Register' %}">Register</a>
 {% endblock con %}

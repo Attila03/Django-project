@@ -94,3 +94,4 @@ venv
 *.pyc
 staticfiles
 .env
+local_settings.py

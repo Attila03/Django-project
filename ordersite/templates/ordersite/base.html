@@ -17,19 +17,26 @@
 
             <ul class="nav navbar-nav">
                 <li class="">
-                    <a href="{% url 'Veg' %}">  VEG  </a>
+                    <a href="{% url 'Menu' 'Veg' %}">  VEG  </a>
                 </li>
                 <li class="">
-                    <a href="{% url 'Nonveg' %}">  NON-VEG  </a>
+                    <a href="{% url 'Menu' 'Nonveg' %}">  NON-VEG  </a>
                 </li>
                 <li class="">
-                    <a href="{% url 'All' %}"> ALL </a>
+                    <a href="{% url 'Menu' 'All' %}"> ALL </a>
                 </li>
                 <li class="">
-                    <a href="{% url 'Custom' %}">CUSTOM PIZZA</a>
+                    <a href="{% url 'Custom' %}"> CUSTOM PIZZA </a>
                 </li>
-
             </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="{% url 'Logout' %}"> LOGOUT </a>
+                </li>
+            </ul>
+
+
 
         </div>
     </nav>

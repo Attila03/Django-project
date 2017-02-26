@@ -27,6 +27,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['pizzacastle.herokuapp.com']
 
+# AUTH_USER_MODEL = 'ordersite.Customer'
+
 
 # Application definition
 
@@ -129,3 +131,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+try:
+    from .local_settings import *
+except ImportError:
+    pass

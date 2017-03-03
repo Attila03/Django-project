@@ -59,18 +59,6 @@ p {
     color: #003366;
 }
 
-.content {
-	background: transparent;
-	/*background-color: white;*/
-	margin: 50px auto;
-	width: 85%;
-	border-radius: 15px;
-	border-color: black;
-	border-style: solid;
-	border-width: thin;
-
-    text-align: center;
-}
 
 .pizza {
 	display: inline-block;
@@ -94,8 +82,31 @@ img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 50%;
+	margin-top: 5%;
 }
 
 .navbar {
     border-radius: 0;
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+.margin-adjust {
+	border-color: black;
+	border: solid;
+	margin: 5%;
+	padding: 1%;
+}
+
+.table {
+	margin: 10% auto;
 }

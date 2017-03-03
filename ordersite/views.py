@@ -10,18 +10,19 @@ from .models import Pizza
 class Homeview(View):
 
     def get(self, request, *args, **kwargs):
+
         return render(request, 'ordersite/Home.html')
 
 
 class Menuview(View):
 
     def get(self, request, menu_type=None):
-        P = Pizza.objects.filter(custom=False)
+        pizza_qs = Pizza.objects.filter(custom=False)
         if menu_type == 'Veg':
-            P = P.filter(vegetarian=True, custom=False)
+            pizza_qs = pizza_qs.filter(vegetarian=True, custom=False)
         elif menu_type == 'Nonveg':
-            P = P.filter(vegetarian=False, custom=False)
-        context = { 'P': P, }
+            pizza_qs = pizza_qs.filter(vegetarian=False, custom=False)
+        context = { 'pizza_qs': pizza_qs, }
 
         return render(request, 'ordersite/Menu.html', context=context)
 
@@ -46,7 +47,7 @@ class Customview(View):
 
     def get(self, request, *args, **kwargs):
         context ={
-            'PF' : PizzaForm(),
+            'form' : PizzaForm(),
         }
         return render(request, 'ordersite/Custom.html', context=context)
 

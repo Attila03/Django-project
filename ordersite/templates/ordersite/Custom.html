@@ -9,20 +9,25 @@
 {% endblock customcss %}
 
 {% block con %}
-<form method="post" style="margin: 5% 30%;">
-    {% csrf_token %}
-    <p style="margin: 5px 19%;">Name : {{PF.name}}</p>
-    {% for t in PF.toppings %}
-        <p style="display:inline-block;width: 31%;margin:5px 5px;">
-            {{ t }}
-        </p>
-        {% if forloop.counter|divisibleby:3 %}
-            <br>
-        {% endif %}
-    {% endfor %}
-    <br>
-
-    <button style="margin: 5px 37%;" type="submit">Create Pizza</button>
-</form>
+<div class="container" >
+    <div class="row" >
+        <div class="col-xs-6 col-xs-offset-3" style="margin-top:5%;">
+            <form method="post">
+                {% csrf_token %}
+                <p style="padding-left: 13%">Name your Pizza : {{ form.name }}</p>
+                </br>
+                <div class="row">
+                    {% for topping in form.toppings %}
+                    <div class="col-xs-4" style="margin-bottom: 2%;margin-top:2%;">
+                        <p>{{ topping }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                </br>
+                <button type="submit" class="btn btn-lg btn-danger center-block ">Create Pizza</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock con %}

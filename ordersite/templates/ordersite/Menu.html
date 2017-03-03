@@ -7,20 +7,33 @@
 {% endblock customcss %}
 
 {% block con %}
-    <div class="content">
-        <h2>MENU</h2>
-        {% for pizza in P %}
-        <a href="{% url 'Pizzaorder' pizza.name %}">
-        <div class="pizza">
-            <img src="{% static pizza.getimageurl %}"/>
-            <p>{{ pizza.name }}</p>
-            {% for topping in pizza.toppings.all %}
-            <p>{{ topping.name }}</p>
-            {% endfor %}
-            <p>Price: Rs.{{ pizza.cost }}</p>
+    <div class="container-fluid margin-adjust">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <h2 class="text-center">MENU</h2>
+                </br>
+                <div class="row ">
+                    {% for pizza in pizza_qs %}
+                    <div class="col-xs-4 text-center">
+                    <a href="{% url 'Pizzaorder' pizza.name %}">
+                        <img class="center-block" src="{% static pizza.getimageurl %}">
+                        </br>
+                        <h5>{{ pizza.name }}</h5>
+                        </br>
+                        <ul>
+                            {% for topping in pizza.toppings.all %}
+                            <li>{{ topping.name }}</li>
+                            {% endfor %}
+                            <li>Price: Rs. {{pizza.cost}}</li>
+                        </ul>
+                    </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
         </div>
-        </a>
-        {% endfor %}
     </div>
+
 
 {% endblock con %}

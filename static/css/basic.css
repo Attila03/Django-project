@@ -49,33 +49,12 @@ body {
     background: linear-gradient(to right, #a1d3b0, #f6f1d3);
 }
 
-h2 {
-	font-weight: 500;
-	font-size: 40px;;
-	margin: 1% 40%;
-}
-
-p {
-    color: #003366;
-}
-
-
 .pizza {
 	display: inline-block;
 	border: #5bc0de;
 	margin: 2% 1.4%;
 	width:30%;
     text-align: center;
-}
-
-.pizza:hover {
-    position: relative;
-    right: 5px;
-    top: 5px;
-}
-
-.pizza p {
-	margin : 1% 13%;
 }
 
 img {
@@ -100,13 +79,7 @@ img {
   display: flex;
   flex-direction: column;
 }
-.margin-adjust {
-	border-color: black;
-	border: solid;
-	margin: 5%;
-	padding: 1%;
-}
 
-.table {
-	margin: 10% auto;
-}
+/*.table {*/
+	/*margin: 10% auto;*/
+/*}*/

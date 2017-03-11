@@ -1,0 +1,60 @@
+{% extends 'ordersite/base.html' %}
+
+{% load static %}
+
+{% block title %} | Order Placed{% endblock title %}
+
+
+{% block customcss %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/basic.css' %}"/>
+{% endblock customcss %}
+
+
+{% block con %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <h3 class="text-center">Your order has been placed!</h3>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+<div class="container-fluid" id="cart" style="position: fixed;width:100%;margin-top:1.5%;">
+{% if request.session.cart.base or request.session.cart.custom %}
+    <div class="row">
+        <div class="col-xs-offset-4 col-xs-4" style="border:solid;border-color:black;background-color: #609ab6;">
+                <br>
+                <p class="text-center">CART</p>
+                <br>
+                <ul>
+                    {% for item in request.session.cart.base %}
+                    <li style="clear: both;">
+                        <p style="float:left;">{{item.0}}</p>
+                        <span style="float:right;">{{item.1}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if request.session.cart.custom %}
+                <br><p class="text-center">CUSTOM</p>
+                <ul>
+                    {% for item in request.session.cart.custom %}
+                    <br>
+                    <li style="clear: both;">
+                        <p style="float:left;">{{item.0}}</p>
+                        <span style="float:right;">{{item.1}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p class="text-right">-----------<br>{{ request.session.total }}</p><br>
+            </div>
+            </div>
+{% endif %}
+</div>
+
+
+{% endblock %}

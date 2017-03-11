@@ -47,7 +47,7 @@ class Pizza(models.Model):
         return sum(topping.cost for topping in self.toppings.all())
 
     def __str__(self):
-        return "{} {} {}".format(self.name, self.cost,  [t.name for t in self.toppings.all()])
+        return self.name
 
     @property
     def getimageurl(self):
@@ -93,6 +93,7 @@ class Customer(User):
 class Cart(models.Model):
     customer = models.ForeignKey(Customer)
     pizzas = models.ManyToManyField(Pizza, blank=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
 
 

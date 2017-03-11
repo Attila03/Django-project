@@ -7,14 +7,26 @@
 {% endblock customcss %}
 
 {% block con %}
+{% if user.is_authenticated %}
+<div class = "container">
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3 text-center" style="font-size: 2em;">
+            <p>You are already logged in as {{ user.username }}.</p>
+            <p>Logout if you want to login/register as another user.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if not user.is_authenticated %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-6 col-xs-offset-3"">
-            <form method="post">
+        <div class="col-xs-6 col-xs-offset-3">
+            <form method="post" class="form-group form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3">
-                        <table  class="table">
+                        <table class="table table-responsive">
                             {{form.as_table}}
                         </table>
                         </div>
@@ -22,10 +34,9 @@
                 </br>
                 <button type="submit" class="btn btn-success center-block">Login</button>
             </form>
-
         </div>
     </div>
 </div>
-
+{% endif %}
 
 {% endblock con %}

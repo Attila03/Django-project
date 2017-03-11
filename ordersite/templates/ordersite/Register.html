@@ -9,6 +9,19 @@
 {% endblock customcss %}
 
 {% block con %}
+
+{% if user.is_authenticated %}
+<div class = "container">
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3 text-center" style="font-size: 2em;">
+            <p>You are already logged in as {{ user.username }}.</p>
+            <p>Logout if you want to register/login as another user.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3" style="margin-top:5%;">

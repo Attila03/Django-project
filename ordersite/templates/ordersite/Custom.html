@@ -9,6 +9,90 @@
 {% endblock customcss %}
 
 {% block con %}
+
+<!--{% if request.session.cart %}-->
+<!--<div class="container-fluid" >-->
+<!--<div class="row">-->
+<!--<div class="col-xs-4 col-xs-offset-4 well">-->
+    <!--<ul>-->
+        <!--{% for item in request.session.cart %}-->
+        <!--<li style="clear: both;">-->
+            <!--<p style="float:left;">{{item.0}}</p>-->
+            <!--<span style="float:right;">{{item.1}}</span>-->
+        <!--</li>-->
+        <!--{% endfor %}-->
+        <!--<br>-->
+        <!--<p class="text-right">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;<br>{{ request.session.total }}</p>-->
+        <!--<br>-->
+        <!--<button type="submit" class="btn btn-warning center-block text-center">Place Order</button>-->
+    <!--</ul>-->
+
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+    <!--{% endif %}-->
+<!--</div>-->
+
+
+{% if user.is_authenticated %}
+<div class="container-fluid" style="position: fixed;width:100%;">
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2 text-center">
+            <div class="row">
+                <div class="col-xs-3 col-xs-offset-9">
+                    <button class="hide-cart btn btn-success">SHOW/HIDE CART</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+{% endif %}
+
+
+<div class="container-fluid" id="cart" style="position: fixed;width:100%;margin-top:1.5%;">
+{% if request.session.cart.base or request.session.cart.custom %}
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-2">
+            <div class="row">
+            <div class="col-xs-3 col-xs-offset-9 cart" style="margin-right: 0.2%;border:solid; border-color:black;background-color: #2e6da4;color:white;">
+                <p class="text-center">CART</p>
+                <br>
+                <ul>
+                    {% for item in request.session.cart.base %}
+                    <li style="clear: both;">
+                        <p style="float:left;">{{item.0}}</p>
+                        <span style="float:right;">{{item.1}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <br>
+                {% if request.session.cart.custom %}
+                <ul>
+                    <p class="text-center">CUSTOM</p>
+                    {% for item in request.session.cart.custom %}
+                    <br>
+                    <li style="clear: both;">
+                        <p style="float:left;">{{item.0}}</p>
+                        <span style="float:right;">{{item.1}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p class="text-right">-----------<br>{{ request.session.total }}</p><br>
+                <a href="{% url 'Order' %}" class="btn btn-warning center-block">Place Order</a>
+                <!--<button type="button" class="btn btn-warning center-block text-center">Place Order</button>-->
+                <!--</a>-->
+            </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</div>
+
+
 <div class="container" >
     <div class="row" >
         <div class="col-xs-6 col-xs-offset-3" style="margin-top:5%;">
@@ -29,5 +113,36 @@
         </div>
     </div>
 </div>
-
 {% endblock con %}
+
+{% block js %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $('form').submit(function(e){
+            e.preventDefault();
+            data = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'Custom' %}",
+                data : data
+            }).done(function(){
+                $('#cart').load(location.href + ' #cart');
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('.hide-cart').click(function(){
+            $('.cart').toggle(400);
+        });
+    });
+
+</script>
+
+{% endblock js %}
+
+
+

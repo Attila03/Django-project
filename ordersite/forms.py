@@ -13,6 +13,13 @@ class PizzaForm(forms.ModelForm):
             'toppings': forms.CheckboxSelectMultiple,
         }
 
+    def clean_toppings(self):
+        toppings = self.cleaned_data['toppings']
+        if len(toppings)==0:
+            print('over here')
+            raise forms.ValidationError('Need atleast one topping.')
+        return toppings
+
 
 class RegistrationForm(forms.ModelForm):
     email2 = forms.EmailField(
@@ -57,7 +64,6 @@ class UserLoginForm(forms.Form):
     def clean(self,*args, **kwargs):
         username = self.cleaned_data['username']
         password = self.cleaned_data['password']
-        print(username, password)
         user = User.objects.filter(username=username)
         if not user:
             raise forms.ValidationError('Username does not exist')

@@ -12,7 +12,7 @@ class PizzaForm(forms.ModelForm):
         widgets = {
             'toppings': forms.CheckboxSelectMultiple,
         }
-
+#No idea why this isn't working.
     def clean_toppings(self):
         toppings = self.cleaned_data['toppings']
         if len(toppings)==0:

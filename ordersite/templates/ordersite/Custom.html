@@ -123,6 +123,8 @@
         $('form').submit(function(e){
             e.preventDefault();
             data = $(this).serialize();
+//            console.log(data);
+//            console.log(typeof(data));
             $.ajax({
                 type: 'POST',
                 url: "{% url 'Custom' %}",

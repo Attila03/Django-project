@@ -2,15 +2,19 @@ from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, 
 from django.contrib.auth import authenticate,login,logout
 from django.views import View
 from .forms import PizzaForm, RegistrationForm, UserLoginForm
-from .models import Pizza, Topping, Cart, Customer
+from .models import Pizza, Topping, Cart
+from .quote import get_quote
 # Create your views here.
-
 
 class Homeview(View):
 
     def get(self, request, *args, **kwargs):
-
-        return render(request, 'ordersite/Home.html')
+        quote, author = get_quote()
+        context = {
+            "quote" : quote,
+            "author" : author
+        }
+        return render(request, 'ordersite/Home.html', context=context)
 
 
 class Menuview(View):
@@ -136,7 +140,7 @@ class Logoutview(View):
         return redirect(reverse('Home'))
 
 
-class Processview(View):
+class AddToCartview(View):
 
     def get(self, request, *args, **kwargs):
         pizza_name, pizza_cost = request.GET['pizza'].split('_')

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import (Homeview, Orderview, Helpview, Loginview, Logoutview,
-                    Customview, Menuview, Registerview, Processview)
+                    Customview, Menuview, Registerview, AddToCartview)
 
 urlpatterns = [
     url(r'^$', Homeview.as_view(), name='Home'),
@@ -11,6 +11,6 @@ urlpatterns = [
     url(r'^Register$', Registerview.as_view(), name='Register'),
     url(r'^Menu/(?P<menu_type>.+)/$', Menuview.as_view(), name='Menu'),
     url(r'^Order/$', Orderview.as_view(), name='Order'),
-    url(r'^ajax_process$', Processview.as_view(), name='process'),
+    url(r'^ajax_process$', AddToCartview.as_view(), name='AddToCart'),
   ]
 

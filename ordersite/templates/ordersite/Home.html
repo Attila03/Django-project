@@ -7,8 +7,9 @@
 {% endblock customcss %}
 
 {% block con %}
-<div style="float: right">
-    <p class="text-center bottom">
+<div style="float: right;margin-right:10px;">
+    <button type="button" class="btn btn-info btn-sm" id="btn-dummy">Dummy User</button>
+    <p class="text-center" id="dummyuser" hidden="hidden">
         Dummy user
         </br>Username : a
         </br>Password : a
@@ -42,3 +43,15 @@
 </div>
 
 {% endblock con %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+       $("#btn-dummy").on("click", function(){
+           console.log('clicked');
+           $("#dummyuser").toggle();
+       });
+    });
+</script>
+
+{% endblock js %}

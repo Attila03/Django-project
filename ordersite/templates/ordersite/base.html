@@ -8,36 +8,43 @@
 
     {% block customcss %}
     {% endblock customcss %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
                 <a class="navbar-brand" href="{% url 'home' %}">The Pizza Place</a>
             </div>
 
-            <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="{% url 'Menu' 'Veg' %}">  VEG  </a>
-                </li>
-                <li class="">
-                    <a href="{% url 'Menu' 'Nonveg' %}">  NON-VEG  </a>
-                </li>
-                <li class="">
-                    <a href="{% url 'Menu' 'All' %}"> ALL </a>
-                </li>
-                <li class="">
-                    <a href="{% url 'Custom' %}"> CUSTOM PIZZA </a>
-                </li>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="">
+                        <a href="{% url 'Menu' 'Veg' %}">  VEG  </a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'Menu' 'Nonveg' %}">  NON-VEG  </a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'Menu' 'All' %}"> ALL </a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'Custom' %}"> CUSTOM PIZZA </a>
+                    </li>
+                </ul>
 
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="{% url 'Logout' %}"> LOGOUT </a>
-                </li>
-            </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{% url 'Logout' %}"> LOGOUT </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -45,8 +52,8 @@
 {% block con %}
 {% endblock con %}
 
-
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 {% block js %}
 {% endblock js %}
 

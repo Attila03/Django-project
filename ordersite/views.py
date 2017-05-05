@@ -46,13 +46,6 @@ class Orderview(View):
 
         return render(request, 'ordersite/Order.html')
 
-
-class Helpview(View):
-
-    def get(self, request, *args, **kwargs):
-        return render(request, 'ordersite/Help.html')
-
-
 class Customview(View):
 
     def get(self, request, *args, **kwargs):

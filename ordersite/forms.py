@@ -8,7 +8,7 @@ class PizzaForm(forms.ModelForm):
 
     class Meta:
         model = Pizza
-        fields = ['toppings', 'name']
+        fields = ['name', 'toppings']
         widgets = {
             'toppings': forms.CheckboxSelectMultiple,
         }

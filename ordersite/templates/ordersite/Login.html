@@ -1,5 +1,5 @@
 {% extends 'ordersite/base.html' %}
-
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block customcss %}
@@ -8,7 +8,7 @@
 
 {% block con %}
 {% if user.is_authenticated %}
-<div class = "container">
+<div class = "container-fluid">
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3 text-center" style="font-size: 2em;">
             <p>You are already logged in as {{ user.username }}.</p>
@@ -22,18 +22,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3">
-            <form method="post" class="form-group form">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-xs-6 col-xs-offset-3">
-                        <table class="table table-responsive">
-                            {{form.as_table}}
-                        </table>
-                        </div>
-                </div>
-                </br>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3 text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <legend><strong>Login</strong></legend>
+                        <hr>
+                        {{form | crispy}}
                 <button type="submit" class="btn btn-success center-block">Login</button>
-            </form>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

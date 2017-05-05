@@ -1,5 +1,5 @@
 {% extends 'ordersite/base.html' %}
-
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %} | Register {% endblock title %}
@@ -25,18 +25,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3" style="margin-top:5%;">
-            <form method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-xs-6 col-xs-offset-3">
-                        <table  class="table">
-                            {{form.as_table}}
-                        </table>
-                        </div>
-                    </div>
-                </br>
-                <button type="submit" class="btn btn-primary center-block">Register</button>
-            </form>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3 text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <legend><strong>REGISTER</strong></legend>
+                        <hr>
+                        {{form | crispy}}
+                        <button type="submit" class="btn btn-primary center-block">Register</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

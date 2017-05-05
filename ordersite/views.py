@@ -98,6 +98,7 @@ class Registerview(View):
 
         return render(request, 'ordersite/Register.html',context=context)
 
+
 class Loginview(View):
 
     def get(self, request, *args, **kwargs):
@@ -134,6 +135,7 @@ class AddToCartview(View):
         request.session['total'] += int(pizza_cost)
         request.session.modified = True
         return HttpResponse()
+
 
 class Orderhistory(View):
 

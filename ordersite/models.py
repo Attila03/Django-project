@@ -5,6 +5,15 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed
 
 
+
+class Customer(User):
+
+    class Meta:
+        proxy=True
+
+    def get_carts(self):
+        return self.cart_set.all()
+
 class Topping(models.Model):
     TOPPING_CHOICES = (
         ('VEG', (
@@ -37,11 +46,12 @@ class Topping(models.Model):
         return "{}  -  {}".format(self.name, self.cost)
 
 class Pizza(models.Model):
-    name = models.CharField(max_length=50,blank=False, unique=True)
+    name = models.CharField(max_length=50,blank=False)
     cost = models.IntegerField(blank=True, default=0)
     toppings = models.ManyToManyField(Topping, blank=True)
     vegetarian = models.BooleanField(blank=True, default=True)
     custom = models.BooleanField(default=True)
+    customer = models.ForeignKey(Customer, null=True)
 
     def total_cost(self):
         return sum(topping.cost for topping in self.toppings.all())
@@ -62,6 +72,12 @@ def update_pizza(sender, **kwargs):
     current.vegetarian = all(topping.vegetarian for topping in current.toppings.all())
     current.save()
 
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer)
+    pizzas = models.ManyToManyField(Pizza, blank=True)
+    last_modified = models.DateTimeField(auto_now=True)
+
+
 # Cannot use Manager 'objects' on instances of Model, can only be used on the Model class itself.
 
     # def save(self, *args, **kwargs):
@@ -80,17 +96,3 @@ def update_pizza(sender, **kwargs):
 #     for t in current.toppings.all():
 #         current.cost += t.cost
 #     current.vegetarian = all(t.vegetarian for t in current.toppings.all())
-
-
-class Customer(User):
-
-    class Meta:
-        proxy=True
-
-    def get_carts(self):
-        return self.cart_set.all()
-
-class Cart(models.Model):
-    customer = models.ForeignKey(Customer)
-    pizzas = models.ManyToManyField(Pizza, blank=True)
-    last_modified = models.DateTimeField(auto_now=True)

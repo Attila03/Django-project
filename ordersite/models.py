@@ -94,7 +94,3 @@ class Cart(models.Model):
     customer = models.ForeignKey(Customer)
     pizzas = models.ManyToManyField(Pizza, blank=True)
     last_modified = models.DateTimeField(auto_now=True)
-
-
-
-

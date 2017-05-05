@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, 
 from django.contrib.auth import authenticate,login,logout
 from django.views import View
 from .forms import PizzaForm, RegistrationForm, UserLoginForm
-from .models import Pizza, Topping, Cart
+from .models import Pizza, Topping, Cart, Customer
 from .quote import get_quote
+from .utils import sessioncart_to_dbcart
 # Create your views here.
 
 class Homeview(View):
@@ -40,14 +41,7 @@ class Orderview(View):
         if not request.session.get('cart_created'):
             new_cart = Cart(customer=customer)
             new_cart.save()
-            for pizza in request.session['cart']['base']:
-                new_cart.pizzas.add(get_object_or_404(Pizza,name=pizza[0]))
-            for pizza in request.session['cart']['custom']:
-                new_pizza = Pizza(name=pizza[0])
-                new_pizza.save()
-                for topping in pizza[2]:
-                    new_pizza.toppings.add(get_object_or_404(Topping, name=topping))
-                new_cart.pizzas.add(new_pizza)
+            sessioncart_to_dbcart(request.session['cart'], new_cart)
             request.session['cart_created']=True
 
         return render(request, 'ordersite/Order.html')
@@ -124,14 +118,6 @@ class Loginview(View):
             return redirect(reverse('Menu', args=('All',)))
         return render(request, 'ordersite/Login.html', context=context)
 
-'''
-Session Cart format
- Cart = {
-        'base': [[pizza_name, pizza_cost],....] ,
-        'custom': [[pizza_name, pizza_cost, [topping.name,...]],...],
-    }
-'''
-
 
 class Logoutview(View):
 
@@ -148,3 +134,16 @@ class AddToCartview(View):
         request.session['total'] += int(pizza_cost)
         request.session.modified = True
         return HttpResponse()
+
+class Orderhistory(View):
+
+    def get(self, request, *args, **kwargs):
+        customer = get_object_or_404(Customer, username=request.user.username)
+        carts = customer.get_carts()
+        context ={
+            'carts': carts,
+        }
+        for cart in carts:
+            for pizza in cart.pizzas.all():
+                print(pizza)
+        return render(request, 'ordersite/Orderhistory.html', context=context)

@@ -1,0 +1,17 @@
+{% extends 'ordersite/base.html' %}
+
+{% block con %}
+
+{% for cart in carts %}
+     <p>{{cart.customer}} {{cart.last_modified}}</p>
+     <p>
+         <ul>
+        {% for pizza in cart.pizzas.all %}
+         <li>{{pizza.name}} {{pizza.cost}}</li>
+         {% endfor %}
+        </ul>
+     </p>
+
+{% endfor %}
+
+{% endblock con %}

@@ -40,6 +40,11 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="{%url 'Orderhistory' %}">My Carts</a>
+                    </li>
+                    {% endif %}
                     <li>
                         <a href="{% url 'Logout' %}"> <span class="glyphicon glyphicon-off"></span>  LOGOUT </a>
                     </li>

@@ -21,18 +21,14 @@
 {% if not user.is_authenticated %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-6 col-xs-offset-3">
-            <div class="row">
-                <div class="col-xs-6 col-xs-offset-3 text-center">
-                    <form method="post">
-                        {% csrf_token %}
-                        <legend><strong>Login</strong></legend>
-                        <hr>
-                        {{form | crispy}}
+        <div class="col-xs-4 col-xs-offset-4 text-center">
+            <form method="post">
+                {% csrf_token %}
+                <legend><strong>LOGIN</strong></legend>
+                <hr>
+                {{form | crispy}}
                 <button type="submit" class="btn btn-success center-block">Login</button>
-                    </form>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

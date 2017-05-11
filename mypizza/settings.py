@@ -29,8 +29,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['pizzacastle.herokuapp.com']
 
-# AUTH_USER_MODEL = 'ordersite.Customer'
-
 
 # Application definition
 

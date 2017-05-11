@@ -1,19 +1,19 @@
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponse, reverse
+from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.contrib.auth import authenticate,login,logout
 from django.views import View
 from .forms import PizzaForm, RegistrationForm, UserLoginForm
 from .models import Pizza, Topping, Cart, Customer
 from .quote import get_quote
-from .utils import sessioncart_to_dbcart
-# Create your views here.
+from .cart import add_base_pizza, add_custom_pizza, sessioncart_to_dbcart
+
 
 class Homeview(View):
 
     def get(self, request, *args, **kwargs):
         quote, author = get_quote()
         context = {
-            "quote" : quote,
-            "author" : author
+            "quote": quote,
+            "author": author
         }
         return render(request, 'ordersite/Home.html', context=context)
 
@@ -28,87 +28,65 @@ class Menuview(View):
             pizza_qs = pizza_qs.filter(vegetarian=False, custom=False)
         context = {
                     'pizza_qs': pizza_qs,
-                    'request' : request,
+                    'request': request,
                     }
-
         return render(request, 'ordersite/Menu.html', context=context)
+
+
+class AddToCartview(View):
+
+    def get(self, request, *args, **kwargs):
+        pizza_id = int(request.GET['pizza'])
+        add_base_pizza(request, request.session["cart"], pizza_id)
+        print(request.session["cart"])
+        return HttpResponse()
 
 
 class Orderview(View):
 
     def get(self, request,*args, **kwargs ):
-        customer = get_object_or_404(Customer, username=request.user.username)
+        customer = request.user
         if not request.session.get('cart_created'):
             new_cart = Cart(customer=customer)
             new_cart.save()
-            sessioncart_to_dbcart(request.session['cart'], new_cart)
-            request.session['cart_created']=True
-
+            sessioncart_to_dbcart(request.session["cart"], new_cart, customer)
+            request.session['cart_created'] = True
         return render(request, 'ordersite/Order.html')
+
 
 class Customview(View):
 
     def get(self, request, *args, **kwargs):
-        context ={
-            'form' : PizzaForm(),
+        context = {
+            'form': PizzaForm(),
         }
         return render(request, 'ordersite/Custom.html', context=context)
 
     def post(self, request):
         form = PizzaForm(request.POST)
         if form.is_valid():
-            pizza_name = form.cleaned_data['name']
-            pizza_toppings = [topping.name for topping in form.cleaned_data['toppings']]
-            pizza_cost = sum(topping.cost for topping in form.cleaned_data['toppings'])
-            request.session['cart']['custom'].append((pizza_name, pizza_cost, pizza_toppings))
-            request.session['total'] += int(pizza_cost)
-            request.session.modified = True
+            custom_pizza = form.save()
+            add_custom_pizza(request, request.session["cart"], custom_pizza.id)
+            print(request.session["cart"])
         return HttpResponse()
-
-
-
-class Registerview(View):
-
-    def get(self, request, *args, **kwargs):
-        context = {
-            'form' : RegistrationForm(),
-        }
-
-        return render(request, 'ordersite/Register.html', context=context)
-
-    def post(self, request, *args, **kwargs):
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            new_user = form.save(commit=False)
-            password = form.cleaned_data['password']
-            new_user.set_password(password)
-            new_user.save()
-            login(request, new_user)
-            return redirect('/')
-        context = {
-            'form' : form,
-        }
-
-        return render(request, 'ordersite/Register.html',context=context)
 
 
 class Loginview(View):
 
     def get(self, request, *args, **kwargs):
         form = UserLoginForm()
-        context = {'form':form}
+        context = {'form': form}
         return render(request, 'ordersite/Login.html',context=context)
 
     def post(self,request,*args,**kwargs):
         form = UserLoginForm(request.POST)
-        context = {'form':form}
+        context = {'form': form}
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(username=username,password=password)
             login(request, user=user)
-            request.session["cart"] = {'base':[], 'custom':[]}
-            request.session['total'] = 0
+            request.session["cart"] = {"base": {}, "custom": {}, "total": 0}
             return redirect(reverse('Menu', args=('All',)))
         return render(request, 'ordersite/Login.html', context=context)
 
@@ -120,25 +98,27 @@ class Logoutview(View):
         return redirect(reverse('Home'))
 
 
-class AddToCartview(View):
+class Registerview(View):
 
     def get(self, request, *args, **kwargs):
-        pizza_name, pizza_cost = request.GET['pizza'].split('_')
-        request.session['cart']['base'].append([pizza_name, pizza_cost])
-        request.session['total'] += int(pizza_cost)
-        request.session.modified = True
-        return HttpResponse()
+        return render(request, 'ordersite/Register.html', context={'form': RegistrationForm()})
+
+    def post(self, request, *args, **kwargs):
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            password = form.cleaned_data['password']
+            new_user.set_password(password)
+            new_user.save()
+            login(request, new_user)
+            return redirect('/')
+        return render(request, 'ordersite/Register.html',context={'form': form})
 
 
 class Orderhistory(View):
 
     def get(self, request, *args, **kwargs):
-        customer = get_object_or_404(Customer, username=request.user.username)
+        customer = Customer.objects.get(username=request.user.username)
         carts = customer.get_carts()
-        context ={
-            'carts': carts,
-        }
-        for cart in carts:
-            for pizza in cart.pizzas.all():
-                print(pizza)
+        context = {"carts": carts}
         return render(request, 'ordersite/Orderhistory.html', context=context)

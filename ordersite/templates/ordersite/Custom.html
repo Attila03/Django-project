@@ -10,6 +10,8 @@
 
 {% block con %}
 
+
+<!--CART BUTTON-->
 {% if user.is_authenticated %}
 <div class="container-fluid" style="position: fixed;width:100%;">
     <div class="row">
@@ -27,37 +29,43 @@
 
 {% endif %}
 
+<!--CART-->
 <div class="container-fluid" id="cart" style="position: fixed;width:100%;margin-top:1.5%;">
 {% if request.session.cart.base or request.session.cart.custom %}
     <div class="row">
         <div class="col-xs-10 col-xs-offset-2">
             <div class="row">
-            <div class="col-xs-5 col-xs-offset-7 col-sm-3 col-sm-offset-9 cart" style="margin-right: 0.2%;border:solid; border-color:black;background-color: #2e6da4;color:white;">
-                <p class="text-center" style="margin-top: 5px;">CART</p>
-                <br>
-                <ul>
-                    {% for item in request.session.cart.base %}
-                    <li style="clear: both;">
-                        <p style="float:left;">{{item.0}}</p>
-                        <span style="float:right;">{{item.1}}</span>
-                    </li>
+            <div class="col-xs-3 col-xs-offset-9 cart">
+                <table class="table table-hover" style="border:solid;border-color: darkblue;">
+                    <tr class="info" style="border-bottom:solid darkblue;">
+                        <th class="text-center"> Pizza</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                    {% if request.session.cart.base %}
+                    {% for id, pizza in request.session.cart.base.items %}
+                    <tr class="text-center {% if pizza.veg %}success{% else %}danger{% endif %}">
+                        <td>{{pizza.name}}</td>
+                        <td>{{pizza.count}}</td>
+                        <td>{{pizza.cost}}</td>
+                    </tr>
                     {% endfor %}
-                </ul>
-                <br>
-                {% if request.session.cart.custom %}
-                <ul>
-                    <p class="text-center">CUSTOM</p>
-                    {% for item in request.session.cart.custom %}
-                    <br>
-                    <li >
-                        <p style="float:left;">{{item.0}}</p>
-                        <span style="float:right;">{{item.1}}</span>
-                    </li>
+                    {% endif %}
+                    {% if request.session.cart.custom.items %}
+                    {% for id,pizza in request.session.cart.custom.items %}
+                    <tr class="text-center {% if pizza.veg %}success{% else %}danger{% endif %}">
+                        <td>{{pizza.name}}</td>
+                        <td>{{pizza.count}}</td>
+                        <td>{{pizza.cost}}</td>
+                    </tr>
                     {% endfor %}
-                </ul>
-                {% endif %}
-                <hr style="width:100%;height: 1px;"/>
-                <p class="text-right">{{ request.session.total }}</p><br>
+                    {% endif %}
+                    <tr class="info text-center" style="border-top: solid darkblue;">
+                        <td>TOTAL</td>
+                        <td></td>
+                        <td>{{request.session.cart.total}}</td>
+                    </tr>
+                </table>
                 <a href="{% url 'Order' %}" class="btn btn-warning center-block" style="margin-bottom: 5px;">Place Order</a>
             </div>
             </div>

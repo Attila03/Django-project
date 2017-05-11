@@ -11,50 +11,52 @@
 
 
 {% block con %}
-<div class="container">
+<div class="container" style="margin-bottom: 50px;">
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3">
-            <h3 class="text-center">Your order has been placed!</h3>
+            <h1 class="text-center">Your order has been placed!</h1>
         </div>
     </div>
 </div>
 
-<br>
-<br>
-
-<div class="container-fluid" id="cart" style="position: fixed;width:100%;margin-top:1.5%;">
+<!--CART-->
 {% if request.session.cart.base or request.session.cart.custom %}
+<div class="container-fluid" id="cart">
     <div class="row">
-        <div class="col-xs-offset-4 col-xs-4" style="border:solid;border-color:black;background-color: #609ab6;">
-                <br>
-                <p class="text-center">CART</p>
-                <br>
-                <ul>
-                    {% for item in request.session.cart.base %}
-                    <li style="clear: both;">
-                        <p style="float:left;">{{item.0}}</p>
-                        <span style="float:right;">{{item.1}}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-
-                {% if request.session.cart.custom %}
-                <br><p class="text-center">CUSTOM</p>
-                <ul>
-                    {% for item in request.session.cart.custom %}
-                    <br>
-                    <li style="clear: both;">
-                        <p style="float:left;">{{item.0}}</p>
-                        <span style="float:right;">{{item.1}}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
+        <div class="col-xs-offset-3 col-xs-6">
+            <table class="table table-hover" style="border:solid;border-color: darkblue;">
+                <tr class="info" style="border-bottom:solid darkblue;">
+                    <th class="text-center"> Pizza</th>
+                    <th classs="text-center">Quantity</th>
+                    <th class="text-center">Cost</th>
+                </tr>
+                {% if request.session.cart.base %}
+                {% for id, pizza in request.session.cart.base.items %}
+                <tr class="text-center {% if pizza.veg %}success{% else %}danger{% endif %}">
+                    <td>{{pizza.name}}</td>
+                    <td>{{pizza.count}}</td>
+                    <td>{{pizza.cost}}</td>
+                </tr>
+                {% endfor %}
                 {% endif %}
-                <p class="text-right">-----------<br>{{ request.session.total }}</p><br>
-            </div>
-            </div>
-{% endif %}
+                {% if request.session.cart.custom.items %}
+                {% for id,pizza in request.session.cart.custom.items %}
+                <tr class="text-center {% if pizza.veg %}success{% else %}danger{% endif %}">
+                    <td>{{pizza.name}}</td>
+                    <td>{{pizza.count}}</td>
+                    <td>{{pizza.cost}}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                <tr class="info text-center" style="border-top: solid darkblue;">
+                    <td>TOTAL</td>
+                    <td></td>
+                    <td>{{request.session.cart.total}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
-
+{% endif %}
 
 {% endblock %}

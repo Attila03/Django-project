@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, m2m_changed
 
 
-
 class Customer(User):
 
     class Meta:
@@ -13,6 +12,7 @@ class Customer(User):
 
     def get_carts(self):
         return self.cart_set.all()
+
 
 class Topping(models.Model):
     TOPPING_CHOICES = (
@@ -45,6 +45,7 @@ class Topping(models.Model):
     def __str__(self):
         return "{}  -  {}".format(self.name, self.cost)
 
+
 class Pizza(models.Model):
     name = models.CharField(max_length=50,blank=False)
     cost = models.IntegerField(blank=True, default=0)
@@ -63,7 +64,8 @@ class Pizza(models.Model):
     def getimageurl(self):
         return '/img/{}.jpg'.format(self.name)
 
-@receiver(m2m_changed, sender = Pizza.toppings.through)
+
+@receiver(m2m_changed, sender=Pizza.toppings.through)
 def update_pizza(sender, **kwargs):
     current = kwargs['instance']
     current.cost = 0
@@ -71,6 +73,7 @@ def update_pizza(sender, **kwargs):
         current.cost += topping.cost
     current.vegetarian = all(topping.vegetarian for topping in current.toppings.all())
     current.save()
+
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer)

@@ -39,3 +39,14 @@
 #menu h2 {
     font-size: 2.5em;
 }
+
+.pizza-name-label{
+    padding-left: 13%;
+    margin-bottom: 5%;
+}
+
+.topping-fields{
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+

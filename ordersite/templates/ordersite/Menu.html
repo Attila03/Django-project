@@ -63,9 +63,9 @@
                     {% endif %}
                     {% if request.session.cart.custom.items %}
                     {% for id,pizza in request.session.cart.custom.items %}
-                    <tr class="text-center {% if pizza.veg %}success{% else %}danger{% endif %}">
+                    <tr class="{% if pizza.veg %}success{% else %}danger{% endif %}">
                         <td>{{pizza.name}}</td>
-                        <td>
+                        <td width="60%">
                             <button type="button" class="btn btn-xs cart-sub {{id}}">-</button>
                             <span class="pizza-count">{{pizza.count}}</span>
                             <button type="button" class="btn btn-xs cart-add {{id}}">+</button>
@@ -147,7 +147,7 @@
         });
     });
 
-    //add-or-subtract buttons on the cart
+    //add-subtract-remove buttons on the cart
     $(document).on('click', '.cart-add', function() {
         var classes = $(this).attr('class');
         $.ajax({

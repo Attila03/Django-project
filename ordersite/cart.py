@@ -60,6 +60,9 @@ def remove_pizza(request, cart, pizza_id):
     if idx in cart["base"]:
         cart["total"] -= cart["base"][idx]["cost"]
         cart["base"].pop(idx)
+    elif idx in cart["custom"]:
+        cart["total"] -= cart["custom"][idx]["cost"]
+        cart["custom"].pop(idx)
     request.session.modified = True
 
 

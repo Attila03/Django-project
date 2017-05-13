@@ -4,7 +4,7 @@ from django.views import View
 from .forms import PizzaForm, RegistrationForm, UserLoginForm
 from .models import Pizza, Topping, Cart, Customer
 from .quote import get_quote
-from .cart import add_base_pizza, add_custom_pizza, sessioncart_to_dbcart
+from .cart import add_base_pizza, add_custom_pizza, sub_pizza, remove_pizza, sessioncart_to_dbcart
 
 
 class Homeview(View):
@@ -38,7 +38,6 @@ class AddToCartview(View):
     def get(self, request, *args, **kwargs):
         pizza_id = int(request.GET['pizza'])
         add_base_pizza(request, request.session["cart"], pizza_id)
-        print(request.session["cart"])
         return HttpResponse()
 
 
@@ -67,7 +66,6 @@ class Customview(View):
         if form.is_valid():
             custom_pizza = form.save()
             add_custom_pizza(request, request.session["cart"], custom_pizza.id)
-            print(request.session["cart"])
         return HttpResponse()
 
 
@@ -122,3 +120,22 @@ class Orderhistory(View):
         carts = customer.get_carts()
         context = {"carts": carts}
         return render(request, 'ordersite/Orderhistory.html', context=context)
+
+
+class Add_sub_remove_cart(View):
+
+    def get(self, request, *args, **kwargs):
+        classes = request.GET['classes']
+        idx = classes.split(" ")[-1]
+        pizza_id = int(idx)
+        if 'add' in classes:
+            if idx in request.session["cart"]["base"]:
+                add_base_pizza(request, request.session["cart"], pizza_id)
+            elif idx in request.session["cart"]["custom"]:
+                add_custom_pizza(request, request.session["cart"], pizza_id)
+        elif 'sub' in classes:
+            sub_pizza(request, request.session["cart"], pizza_id)
+        elif 'remove' in classes:
+            remove_pizza(request, request.session["cart"], pizza_id)
+        return HttpResponse()
+

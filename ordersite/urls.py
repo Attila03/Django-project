@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import (Homeview, Orderview, Loginview, Logoutview,
+from .views import (Homeview, Orderview, Loginview, Logoutview, Add_sub_remove_cart,
                     Customview, Menuview, Registerview, AddToCartview, Orderhistory)
 
 urlpatterns = [
@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^order/$', Orderview.as_view(), name='Order'),
     url(r'^orderhistory/$', Orderhistory.as_view(), name='Orderhistory'),
     url(r'^ajax_process/$', AddToCartview.as_view(), name='AddToCart'),
+    url(r'add_sub_remove_cart/$', Add_sub_remove_cart.as_view(), name='Add_sub_remove_cart'),
   ]
 

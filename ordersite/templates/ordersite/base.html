@@ -26,13 +26,13 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="">
-                        <a href="{% url 'Menu' 'Veg' %}">  VEG  </a>
+                        <a href="{% url 'Menu' 'Veg' %}">  <span style="color: darkgreen;">VEG</span>  </a>
                     </li>
                     <li class="">
-                        <a href="{% url 'Menu' 'Nonveg' %}">  NON-VEG  </a>
+                        <a href="{% url 'Menu' 'Nonveg' %}">  <span style="color: indianred">NON-VEG</span>  </a>
                     </li>
                     <li class="">
-                        <a href="{% url 'Menu' 'All' %}"> ALL </a>
+                        <a href="{% url 'Menu' 'All' %}"> <span style="color: lightgoldenrodyellow;">ALL</span> </a>
                     </li>
                     <li class="">
                         <a href="{% url 'Custom' %}"> CUSTOM PIZZA </a>
@@ -42,11 +42,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                     <li>
-                        <a href="{%url 'Orderhistory' %}">My Carts</a>
+                        <a href="{%url 'Orderhistory' %}"><span style="color: #5bc0de;" class="glyphicon glyphicon-shopping-cart"></span> My Carts</a>
                     </li>
                     {% endif %}
                     <li>
-                        <a href="{% url 'Logout' %}"> <span class="glyphicon glyphicon-off"></span>  LOGOUT </a>
+                        <a href="{% url 'Logout' %}"> <span style="color:darkred" class="glyphicon glyphicon-off"></span>  LOGOUT </a>
                     </li>
                 </ul>
             </div>

@@ -40,6 +40,30 @@ def add_custom_pizza(request, cart, pizza_id):
     cart["total"] += pizza.cost
     request.session.modified = True
 
+def sub_pizza(request, cart, pizza_id):
+    idx = str(pizza_id)
+    pizza = Pizza.objects.get(pk=pizza_id)
+    if idx in cart["base"]:
+        if cart["base"][idx]["count"] != 1:
+            cart["base"][idx]["count"] -= 1
+            cart["base"][idx]["cost"] -= pizza.cost
+            cart["total"] -= pizza.cost
+    elif idx in cart["custom"]:
+        if cart["custom"][idx]["count"] != 1:
+            cart["custom"][idx]["count"] -= 1
+            cart["base"][idx]["cost"] -= pizza.cost
+            cart["total"] -= pizza.cost
+    request.session.modified = True
+
+def remove_pizza(request, cart, pizza_id):
+    idx = str(pizza_id)
+    if idx in cart["base"]:
+        cart["total"] -= cart["base"][idx]["cost"]
+        cart["base"].pop(idx)
+    request.session.modified = True
+
+
+
 
 
 def sessioncart_to_dbcart(sessioncart, dbcart, customer):

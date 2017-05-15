@@ -8,7 +8,7 @@
 {% endblock customcss %}
 
 {% block con %}
-
+<div class="menu-body">
 {% if not user.is_authenticated %}
 <p class="text-center"; style="font-size: larger"><a href="{% url 'Login' %}">Please Login to Order.</a></p>
 {% endif %}
@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-xs-11 col-xs-offset-1 text-center">
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-9 col-sm-5 col-sm-offset-7 col-xs-7 col-xs-offset-5">
+                <div class="col-lg-3 col-lg-offset-9 col-sm-5 col-sm-offset-7 col-xs-6 col-xs-offset-6">
                     <button class="hide-cart btn btn-success">SHOW/HIDE CART</button>
                 </div>
             </div>
@@ -33,17 +33,18 @@
 {% endif %}
 
 <!--CART-->
-{% if request.session.cart.base or request.session.cart.custom %}
+
 <div class="container" id="cart">
+    {% if request.session.cart.base or request.session.cart.custom %}
     <div class="row">
         <div class="col-xs-11 col-xs-offset-1">
             <div class="row">
-            <div class="col-lg-3 col-lg-offset-9 col-sm-5 col-sm-offset-7 col-xs-7 col-xs-offset-5 cart">
+            <div class="col-lg-3 col-lg-offset-9 col-sm-5 col-sm-offset-7 col-xs-6 col-xs-offset-6 cart">
                 <table class="table table-hover table-condensed table-responsive">
                     <thead>
                     <tr class="info">
-                        <th class="text-center" width="60%;"> Pizza</th>
-                        <th width="60%;">Quantity</th>
+                        <th class="text-center" width="40%"> Pizza</th>
+                        <th class="text-center" width="60%">Quantity</th>
                         <th>Cost</th>
                     </tr>
                     </thead>
@@ -51,8 +52,8 @@
                     {% if request.session.cart.base %}
                     {% for id, pizza in request.session.cart.base.items %}
                     <tr class="{% if pizza.veg %}success{% else %}danger{% endif %}">
-                        <td>{{pizza.name}}</td>
-                        <td width="60%;">
+                        <td width="40%">{{pizza.name}}</td>
+                        <td width="60%" class="text-center">
                             <button type="button" class="btn btn-xs cart-sub {{id}}">-</button>
                              <span class="pizza-count">{{pizza.count}}</span>
                             <button type="button" class="btn btn-xs cart-add {{id}}">+</button>
@@ -67,8 +68,8 @@
                     {% if request.session.cart.custom.items %}
                     {% for id,pizza in request.session.cart.custom.items %}
                     <tr class="{% if pizza.veg %}success{% else %}danger{% endif %}">
-                        <td>{{pizza.name}}</td>
-                        <td width="60%">
+                        <td width="40%">{{pizza.name}}</td>
+                        <td width="60%" class="text-center">
                             <button type="button" class="btn btn-xs cart-sub {{id}}">-</button>
                             <span class="pizza-count">{{pizza.count}}</span>
                             <button type="button" class="btn btn-xs cart-add {{id}}">+</button>
@@ -80,22 +81,21 @@
                     </tr>
                     {% endfor %}
                     {% endif %}
-                    </tbody>
-                    <tfoot>
                     <tr class="info text-center">
                         <td>TOTAL</td>
-                        <td></td>
+                        <td> </td>
                         <td>{{request.session.cart.total}}</td>
                     </tr>
-                    </tfoot>
+                    </tbody>
                 </table>
                 <a href="{% url 'Order' %}" class="btn btn-warning center-block">Place Order</a>
             </div>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
-{% endif %}
+
 <!--END CART-->
 
 <!--MENU-->
@@ -123,7 +123,7 @@
     </div>
 </div>
 
-
+</div>
 {% endblock con %}
 
 
@@ -147,13 +147,13 @@
     });
 
     $(document).ready(function () {
-        $('.hide-cart').click(function(){
+        $(document).on('click', '.hide-cart', function(){
             $('.cart').toggle(400);
         });
     });
 
-    //add-subtract-remove buttons on the cart
-    $(document).on('click', '.cart-add', function() {
+    //add-subtract-remove buttons in the cart
+    $(document).on('click', '.cart-add, .cart-sub, .cart-remove', function() {
         var classes = $(this).attr('class');
         $.ajax({
             type: 'GET',
@@ -167,33 +167,7 @@
         });
     });
 
-    $(document).on('click', '.cart-sub', function(){
-        var classes = $(this).attr('class');
-        $.ajax({
-           type: 'GET',
-            url: "{% url 'Add_sub_remove_cart' %}",
-            data: {
-                'classes': classes
-            },
-            success: function(data){
-                $('#cart').load(location.href + ' #cart');
-            }
-        });
-    });
 
-    $(document).on('click', '.cart-remove', function(){
-        var classes = $(this).attr('class');
-        $.ajax({
-           type: 'GET',
-            url: "{% url 'Add_sub_remove_cart' %}",
-            data: {
-                'classes': classes
-            },
-            success: function(data){
-                $('#cart').load(location.href + ' #cart');
-            }
-        });
-    })
 
 </script>
 

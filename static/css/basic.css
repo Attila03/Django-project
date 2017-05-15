@@ -37,10 +37,10 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+/*table {*/
+	/*border-collapse: collapse;*/
+	/*border-spacing: 0;*/
+/*}*/
 
 /*CUSTOM*/
 
@@ -75,6 +75,7 @@ img {
   display:         flex;
   flex-wrap: wrap;
 }
+
 .row > [class*='col-'] {
   display: flex;
   flex-direction: column;

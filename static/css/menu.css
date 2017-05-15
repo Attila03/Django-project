@@ -1,3 +1,7 @@
+.login-msg {
+    font-size: 2.5em;
+}
+
 #cartbutton {
     position: fixed;
     top: 10%;
@@ -80,7 +84,4 @@
 #menu > div > div > div > div > ul {
     padding-bottom: 20%;
 }
-
-
-
 

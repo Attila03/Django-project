@@ -8,9 +8,9 @@
 {% endblock customcss %}
 
 {% block con %}
-<div class="menu-body">
+
 {% if not user.is_authenticated %}
-<p class="text-center"; style="font-size: larger"><a href="{% url 'Login' %}">Please Login to Order.</a></p>
+<p class="text-center login-msg";><a href="{% url 'Login' %}">Please Login to Order.</a></p>
 {% endif %}
 
 <!--CART BUTTON-->
@@ -27,8 +27,6 @@
     </div>
 </div>
 <!--END CART BUTTON-->
-
-<br>
 
 {% endif %}
 
@@ -123,7 +121,6 @@
     </div>
 </div>
 
-</div>
 {% endblock con %}
 
 

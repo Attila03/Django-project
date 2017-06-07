@@ -7,13 +7,14 @@ def get_quote():
 
     try:
         quote_page = requests.get(quote_url)
+        soup = BeautifulSoup(quote_page.content, 'html.parser')
+
+        my_tag = soup.find("div", {"class": "qotd-h-short"})
+
+        quote = my_tag.find("a", {"title": "view quote"}).get_text()
+        author = my_tag.find("a", {"title": "view author"}).get_text()
     except:
         return ("To begin, begin", "Anonymous")
 
-    soup = BeautifulSoup(quote_page.content, 'html.parser')
 
-    my_tag = soup.find("div", {"class":"bqcpx"})
-
-    quote = my_tag.find("a", {"title": "view quote"}).get_text()
-    author = my_tag.find("a", {"title": "view author"}).get_text()
     return (quote, author)

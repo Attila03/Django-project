@@ -43,7 +43,7 @@ class AddToCartview(View):
 
 class Orderview(View):
 
-    def get(self, request,*args, **kwargs ):
+    def get(self, request, *args, **kwargs ):
         customer = request.user
         if not request.session.get('cart_created'):
             new_cart = Cart(customer=customer)

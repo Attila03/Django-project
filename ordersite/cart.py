@@ -40,6 +40,7 @@ def add_custom_pizza(request, cart, pizza_id):
     cart["total"] += pizza.cost
     request.session.modified = True
 
+
 def sub_pizza(request, cart, pizza_id):
     idx = str(pizza_id)
     pizza = Pizza.objects.get(pk=pizza_id)
@@ -55,6 +56,7 @@ def sub_pizza(request, cart, pizza_id):
             cart["total"] -= pizza.cost
     request.session.modified = True
 
+
 def remove_pizza(request, cart, pizza_id):
     idx = str(pizza_id)
     if idx in cart["base"]:
@@ -64,9 +66,6 @@ def remove_pizza(request, cart, pizza_id):
         cart["total"] -= cart["custom"][idx]["cost"]
         cart["custom"].pop(idx)
     request.session.modified = True
-
-
-
 
 
 def sessioncart_to_dbcart(sessioncart, dbcart, customer):
@@ -79,3 +78,9 @@ def sessioncart_to_dbcart(sessioncart, dbcart, customer):
         pizza.save()
         dbcart.pizzas.add(pizza)
     dbcart.save()
+
+
+def  dbcart_to_sessioncart(dbcart, sessioncart, customer):
+    '''Converts the db model Cart object into a session cart dictionary'''
+
+    pass

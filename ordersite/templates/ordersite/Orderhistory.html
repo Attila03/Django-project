@@ -1,17 +1,29 @@
 {% extends 'ordersite/base.html' %}
+{% load static %}
+
+{% block customcss %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/basic.css' %}"/>
+{% endblock customcss %}
 
 {% block con %}
 
+<div class="container-fluid">
 {% for cart in carts %}
-     <p>{{cart.customer}} {{cart.last_modified}}</p>
-     <p>
-         <ul>
-        {% for pizza in cart.pizzas.all %}
-         <li>{{pizza.name}} {{pizza.cost}}</li>
-         {% endfor %}
-        </ul>
-     </p>
-
+    <div class="row">
+        <div class="col-xs-4 col-xs-offset-4">
+         <p class="text-center">Last Used On:  {{cart.last_modified}}</p>
+             <ul style="list-style: none">
+            {% for pizza in cart.pizzas.all %}
+             <li>
+                 {{pizza.name}}
+                <span class="pull-right">{{pizza.cost}}</span>
+            </li>
+             {% endfor %}
+            </ul>
+            <button type="button" class="btn btn-primary center-block">Use Cart</button>
+        </div>
+    </div>
 {% endfor %}
+</div>
 
 {% endblock con %}

@@ -21,7 +21,7 @@ class Homeview(View):
 class Menuview(View):
 
     def get(self, request, menu_type=None):
-        pizza_qs = Pizza.objects.filter(custom=False)
+        pizza_qs = Pizza.objects.filter(custom=False).prefetch_related('toppings')
         if menu_type == 'Veg':
             pizza_qs = pizza_qs.filter(vegetarian=True, custom=False)
         elif menu_type == 'Nonveg':

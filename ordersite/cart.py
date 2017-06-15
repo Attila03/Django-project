@@ -70,14 +70,20 @@ def remove_pizza(request, cart, pizza_id):
 
 def sessioncart_to_dbcart(sessioncart, dbcart, customer):
     '''Converts the session cart dictionary into db model Cart object and associates it with a customer'''
-    for idx in sessioncart["base"]:
-        dbcart.pizzas.add(Pizza.objects.get(pk=int(idx)))
-    for idx in sessioncart["custom"]:
-        pizza = Pizza.objects.get(pk=int(idx))
-        pizza.customer = customer
-        pizza.save()
-        dbcart.pizzas.add(pizza)
+    base_indices = [int(x) for x in sessioncart["base"].keys()]
+    # dbcart.pizzas.add(*Pizza.objects.filter(id__in=base_indices))
+    # for idx in sessioncart["base"]:
+    #     dbcart.pizzas.add(Pizza.objects.get(pk=int(idx)))
+    custom_indices = [int(x) for x in sessioncart["custom"].keys()]
+    Pizza.objects.filter(id__in=custom_indices).update(customer=customer)
+    dbcart.pizzas.add(*Pizza.objects.filter(id__in=custom_indices+base_indices))
     dbcart.save()
+    # for idx in sessioncart["custom"]:
+    #     pizza = Pizza.objects.get(pk=int(idx))
+    #     pizza.customer = customer
+    #     pizza.save()
+    #     dbcart.pizzas.add(pizza)
+    # dbcart.save()
 
 
 def  dbcart_to_sessioncart(dbcart, sessioncart, customer):
